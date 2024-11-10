@@ -1,0 +1,253 @@
+
+body {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    place-items: center;
+}
+
+/* 自定义按钮样式 */
+button {
+    display: inline-block;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    background-color: #fff;
+    border: 1px solid #dcdfe6;
+    color: #606266;
+    text-align: center;
+    box-sizing: border-box;
+    transition: .1s;
+    font-weight: 500;
+    position: relative;
+    padding: 4px 10px;
+    font-size: 12px;
+    border-radius: 4px;
+    margin-left: 2px;
+
+    /* 自定义颜色 */
+    --el-button-bg-color: #d9ecff;
+    --el-button-border-color: var(--el-button-bg-color);
+    --el-button-text-color: #fff;
+}
+
+button:hover {
+    background-color: var(--el-button-bg-color);
+    border-color: var(--el-button-bg-color);
+    color: #337ecc;
+}
+
+button:active {
+    background-color: #ecf5ff;
+    border-color: #ecf5ff;
+    color: #337ecc;
+}
+
+/* 自定义滚动条样式 */
+::-webkit-scrollbar {
+    /* 滚动条宽度 */
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    /* 轨道背景颜色 */
+    background-color: rgba(0, 0, 0, 0.1);
+    /* 圆角 */
+    border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #d0e4fc; /* 滚动条颜色 */
+    border-radius: 2px; /* 圆角 */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #b5bcc4; /* 滚动条悬停时的颜色 */
+}
+
+.msg {
+    font-size: 14px;
+    top: 40px;
+    position: fixed;
+    border-radius: 4px;
+    padding: 10px 20px;
+    max-width: 60vw;
+    border: 1px solid;
+}
+
+.bg-div-gray {
+    background-color: rgba(115, 118, 122, 0.61);
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    top: 0;
+    left: 0;
+    position: fixed;
+    display: flex; /* 使用Flexbox布局 */
+    align-items: center; /* 垂直居中 */
+    justify-content: center; /* 水平居中 */
+    z-index: 9999;
+}
+
+.dialog {
+    font-size: 16px;
+    border-radius: 4px;
+    padding: 10px 20px;
+    max-width: 60vw;
+    border: 1px solid;
+    margin: auto;
+    box-sizing: border-box; /* 确保padding和border计算在width内 */
+}
+
+.update-dialog {
+    background-color: white;
+    border-radius: 4px;
+    padding: 10px 20px;
+}
+
+.update-open {
+    text-align: right;
+    margin: 10px
+}
+.update-title {
+    text-align: center;
+}
+
+.dialog-buttons {
+    margin-top: 6px;
+    text-align: right;
+}
+
+.primary {
+    color: #666;
+    background-color: #deffcd;
+    border-color: #aaa;
+}
+
+.success {
+    color: #67c23a;
+    background-color: #deffcd;
+    border-color: #67c23a;
+}
+
+.error {
+    color: #f87070;
+    background-color: #fdd4d4;
+    border-color: #f87070;
+}
+
+.warning {
+    color: #b88230;
+    background-color: #faecd8;
+    border-color: #f3d19e;
+}
+
+.info {
+    color: #73767a;
+    background-color: #e9e9eb;
+    border-color: #b1b3b8;
+}
+
+.part {
+    padding: 0 4px 4px 2px;
+    border-radius: 4px;
+    margin-left: 2px;
+}
+
+.svg-button {
+    height: 12px;
+    width: 12px;
+}
+
+.txt-button {
+    border: 0;
+    background-color: transparent;
+    padding: 4px 2px;
+    margin-left: 0;
+}
+
+.button-img {
+    display: inline-block;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    border: 0;
+    text-align: center;
+    box-sizing: border-box;
+    transition: .1s;
+    position: relative;
+    padding: 4px 4px;
+    border-radius: 4px;
+    margin-left: 2px;
+}
+
+.input-text-1 {
+    width: 500px;
+}
+
+.input-text-2 {
+    width: 400px;
+}
+
+.input-text-3 {
+    width: 300px;
+}
+
+.input-text-4 {
+    width: 200px;
+}
+
+.input-text-5 {
+    width: 150px;
+}
+
+.input-text-6 {
+    width: 100px;
+}
+
+.input-number {
+    width: 100px;
+    text-align: center;
+    color: #357eb9;
+}
+
+.boolean-true {
+    border: 1px solid #aaa;
+    border-radius: 4px 0 0 4px;
+    margin-right: 0;
+}
+
+.boolean-false {
+    margin-left: 0;
+    border-radius: 0 4px 4px 0;
+    border: 1px solid #aaa;
+}
+
+.boolean-null {
+    margin-left: 0;
+    border-radius: 0 4px 4px 0;
+    border: 1px solid #aaa;
+}
+
+.this-value-true {
+    background-color: #409eff;
+    color: white;
+    border: 1px solid #409eff;
+}
+
+.this-value-true:hover {
+    background-color: #68a9fd;
+    color: white;
+    border: 1px solid #409eff;
+}
+
+.this-value-true:active {
+    background-color: #68a9fd;
+    color: white;
+    border: 1px solid #409eff;
+}
+
+.select-div {
+    height: 20px;
+}

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>gojs</title>
+    <script src="https://unpkg.com/gojs@3.0.3/release/go.js"></script>
+    <script>
+        function init() {
+            const diagram =
+                new go.Diagram("myDiagramDiv",
+                    { // enable Ctrl-Z to undo and Ctrl-Y to redo
+                        "undoManager.isEnabled": true
+                    });
+
+            diagram.nodeTemplate =
+                new go.Node("Auto").add(
+                        new go.Shape("RoundedRectangle", {fill: "whitesmoke"}),
+                        new go.Panel('Table').add(
+                            new go.TextBlock({margin: 5, row: 0})
+                                .bind("text", "key"),
+                            new go.TextBlock({margin: 5, row: 1})
+                                .bind("text", "name")
+                        )
+                    );
+
+            diagram.layout = new go.TreeLayout();
+
+            const nodeDataArray = [
+                {key: "Alpha", name: "a1"},
+                {key: "Beta", name: 'b1'}
+            ];
+            const linkDataArray = [
+                {from: "Alpha", to: "Beta"}
+            ];
+            diagram.model = new go.GraphLinksModel(nodeDataArray, linkDataArray);
+            diagram.model.undoManager.isEnabled = true;
+
+            return diagram
+        }
+
+        // define a function named "addChild" that is invoked by a button click
+        function addNode() {
+            console.log('dsdf')
+            const selnode = diagram.selection.first();
+            if (!(selnode instanceof go.Node)) return;
+            diagram.commit(d => {
+                // have the Model add a new node data
+                const newnode = {key: "N", name: 'na'};
+                d.model.addNodeData(newnode);  // this makes sure the key is unique
+                // and then add a link data connecting the original node with the new one
+                const newlink = {from: selnode.data.key, to: newnode.key};
+                // add the new link to the model
+                d.model.addLinkData(newlink);
+            }, "add node and link");
+        };
+
+        function updateName() {
+            diagram.model.commit(m => {
+                const data = m.nodeDataArray[0];  // get the first node data
+                m.set(data, "name", data.name + ' 1');
+                console.log('middle', JSON.stringify(m.nodeDataArray))
+            }, "increment");
+            console.log(JSON.stringify(diagram.model.nodeDataArray))
+        };
+
+        let diagram = {}
+        window.addEventListener('DOMContentLoaded', () => {
+            // setTimeout only to ensure font is loaded before loading diagram
+            // you may want to use an asset loading library for this
+            // to keep this sample simple, it does not
+            setTimeout(() => {
+                diagram = init();
+            }, 300);
+        });
+    </script>
+</head>
+<body>
+<h3>jklsjfsd</h3>
+<button onclick="addNode()">add</button>
+<button onclick="updateName()">update</button>
+<hr>
+<div id="myDiagramDiv"
+     style="width:400px; height:150px; background-color: #DAE4E4;"></div>
+</body>
+</html>

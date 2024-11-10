@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>json工具</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 引入 Vue.js -->
+    <script src="js/vue3.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/component.js"></script>
+    <script src="js/methods.js"></script>
+    <script src="js/db-util.js"></script>
+    <script src="js/test-data.js"></script>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/str-util.css">
+</head>
+<body>
+<!-- 使用 Element Plus 组件 -->
+<div id="app">
+    <!-- 操作目录 -->
+    <div class="menu">
+        <!-- json操作 -->
+        <div class="row">
+            <span><b>&nbsp;&nbsp;json: &nbsp;&nbsp;</b></span>
+            <span class="part" style="background-color: #67c23a">
+                <button class="success" @click="jsonFormat" title="复制json格式化后的字符串">json格式</button>
+                <button class="success" @click="jsonMin" title="复制json压缩字符串">json压缩</button>
+            </span>
+
+            <button @click="rowToArr('\n')" title="行、逗号都会转一个元素">分割数组</button>
+            <button @click="rowToArr1('\n')" title="行转为数组">行转数组</button>
+            <button @click="rowToArr('\t')" title="Excel表一行转数组">表数组</button>
+            <button @click="rowToObj('\n')" title="每行、逗号变为对象的一个属性">行转对象</button>
+
+            <span class="part" style="background-color: #a1f699">
+                <button @click="objKeysToCopy" title="复制对象key为数组">key数组</button>
+                <button @click="objValToCopy" title="复制对象值为数组">值数组</button>
+                <button @click="objInit" title="对象值初始化">值初始化</button>
+                <button @click="setVal"
+                        title="将结果中的字符串按【行、英文逗号、\t】 对应顺序赋值\n跳过的字段使用【pass】跳过">顺序赋值</button>
+                <button @click="copyVal" class="info" title="值复制，结果对象中可以复制到输入对象">复制值</button>
+                <button @click="rowToKeyVal()" title="行转对象，key、value使用 \t ,分割">行转对象</button>
+                <button @click="tabToKeyVal()" title="表头为key，单行为对象">对象数组</button>
+            </span>
+        </div>
+
+        <!-- SQL 操作 -->
+        <div class="row">
+            <span><b>&nbsp;&nbsp;SQL: &nbsp;&nbsp;</b></span>
+            <button @click="rowToArrSql">行转数组</button>
+        </div>
+
+        <!-- 其他操作 -->
+        <div class="row">
+            <span><b>&nbsp;&nbsp;其他: &nbsp;&nbsp;</b></span>
+            <button @click="oneToJson" title="oneApi参数说明转json">one转json</button>
+            <button @click="arrToStr" title="分割字符串、字符串数组去除括号、双引号">数组简化</button>
+            <span class="part" style="background-color: #e8d9cf">
+                <button @click="nowLong">当前时间戳</button>
+                <button @click="nowDate">当前时间</button>
+                <button @click="longToTime">时间戳转str</button>
+                <button @click="dateToLong">str转long</button>
+            </span>
+        </div>
+    </div>
+
+    <!-- 显示 -->
+    <div class="main">
+
+        <!-- 左侧输入 -->
+        <div :class="leftClass">
+            <!-- 输入操作 -->
+            <div class="row">
+                输入及对应操作：
+                <button @click="cpInput" class="success" title="复制输入">复制</button>
+                <button @click="dataChange()">{{ inputType === 'str' ? '转obj' : '转str' }}</button>
+                <button @click="rightDisplay()">{{ displayRight ? '隐藏结果' : '显示结果' }}</button>
+                <button @click="jsonNameDialog = true">保存</button>
+                <span v-if="inputType === 'str'">
+                    <button @click="strFormat()">格式化</button>
+                    <button @click="inputStr = ''">初始化str</button>
+                    <button @click="inputStr = '{}'">初始化obj</button>
+                </span>
+                <span v-else>
+                    <button @click="setJsonDisplay()">{{ childrenJsonDisplay ? '全收起' : '全展开' }}</button>
+                </span>
+
+                <!-- 保存 读取数据 -->
+                <select v-model="thisDataObj" class="select-div" @change="thisDataChange" v-if="saveData.length > 0"
+                        style="width: 150px; margin-left: 6px">
+                    <option v-for="item in saveData" :value="item" :key="item.name">{{ item.name }}</option>
+                </select>
+                <button title="删除当前选择数据" class="button-img error" @click="deleteData()"
+                        v-if="saveData.includes(thisDataObj)">
+                    <img src="img/delete.svg" class="svg-button"/>
+                </button>
+                <button title="导出当前数据" @click="exportData"  v-if="saveData.length > 0">导出</button>
+            </div>
+
+            <!-- 输入显示 -->
+            <div class="input-div">
+                <!-- 输入框 -->
+                <div class="editor-container" v-if="inputType === 'str'">
+                    <div class="line-numbers" ref="lineNumbers"></div>
+                    <textarea v-model="inputStr" :class="inputClass" :rows="lines+1"
+                              @input="updateLineNumbers"></textarea>
+                </div>
+                <!-- 输入json -->
+                <json-input ref="child" v-model="inputObj" v-else/>
+            </div>
+        </div>
+
+        <!-- 右侧结果 -->
+        <div :class="rightClass">
+            <!-- 结果操作 -->
+            <div class="row">
+                结果及对应操作：
+                <button @click="copyTextIn(outputStr)" class="success" title="复制结果">复制</button>
+                <button class="button-img success">
+                    <img src="img/copy.svg" class="svg-button">
+                </button>
+                <button @click="rightDisplay()" class="button-img" title="隐藏结果">
+                    <img src="img/hide.svg" class="svg-button">
+                </button>
+            </div>
+
+            <!-- 结果显示 -->
+            <div class="output-div">
+                <div class="editor-container">
+                    <div class="line-numbers" ref="lineNumbersOut"></div>
+                    <textarea v-model="outputStr" class="input" :rows="linesOut+1"
+                              @input="updateLineNumbersOutOnly"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-div-gray" v-if="jsonNameDialog">
+        <div class="update-dialog">
+            <h3 class="update-title">保存数据名称</h3>
+            <input class="input-text-2" v-model="jsonName" placeholder="请输入名称，同名是会修改原有数据">
+            <div class="update-open">
+                <button class="primary" @click="jsonNameDialog = false">取消</button>
+                <button class="success" @click="saveDataDo">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 创建应用实例
+    const app = Vue.createApp({
+        data() {
+            return {
+                message: '测试开始',
+                inputType: 'obj',
+                inputStr: inputStrArr[0],
+                inputObj: inputObjArr[0],
+                lines: 0,
+                linesOut: 0,
+                outputStr: '',
+                displayRight: true,
+                leftClass: 'left',
+                rightClass: 'right',
+                inputClass: 'input',
+                childrenJsonDisplay: true,
+                jsonNameDialog: false,
+                jsonName: '',
+                saveData: [],
+                thisDataObj: {},
+            }
+        },
+        methods: methods,
+        mounted() {
+            this.updateLineNumbers();
+            this.updateLineNumbersOut();
+            // 示例：查询所有数据并打印
+            (async () => {
+                try {
+                    const allData = await getAllData();
+                    this.saveData.push(...allData)
+                } catch (error) {
+                    console.error("Failed to retrieve all data:", error);
+                }
+            })();
+        },
+        components: {
+            'json-input': jsonInput,
+        }
+    });
+    app.mount('#app');
+
+</script>
+</body>
+</html>
