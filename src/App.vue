@@ -2,11 +2,13 @@
 import HelloWorld from './components/HelloWorld.vue'
 import GojsFirst from "./test/GojsFirst.vue";
 import GojsAddNode from "./test/GojsAddNode.vue";
+import FirebaseRead from "./components/FirebaseRead.vue";
 </script>
 
 <template>
   <!--<gojs-first/>-->
-  <gojs-add-node/>
+  <!--<gojs-add-node/>-->
+  <firebase-read/>
 </template>
 
 <style scoped>
