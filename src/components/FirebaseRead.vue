@@ -2,7 +2,7 @@
   <div>
     <h1>Firebase Read</h1>
     <ul>
-      <li v-for="user in users" :key="user.id">{{ user.name }}</li>
+      <li v-for="user in users" :key="user.id">{{ user.date }}</li>
     </ul>
   </div>
 </template>
@@ -17,9 +17,11 @@ export default {
     const users = ref([]);
 
     const getUsers = async () => {
-      const querySnapshot = await getDocs(collection(db, 'users'));
+      const querySnapshot = await getDocs(collection(db, 'testFirst'));
       querySnapshot.forEach((doc) => {
+        console.log(doc.id, ' => ', doc.data())
         users.value.push({ id: doc.id, ...doc.data() });
+        console.log(users.value)
       });
     };
 

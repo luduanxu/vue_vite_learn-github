@@ -3,12 +3,13 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyAgKrM7xfKyt4OxsQKx2cOtXnzARRODXlY",
+    authDomain: "firsttestqilv.firebaseapp.com",
+    projectId: "firsttestqilv",
+    storageBucket: "firsttestqilv.firebasestorage.app",
+    messagingSenderId: "316467497114",
+    appId: "1:316467497114:web:7216b90e8f470be886f723",
+    measurementId: "G-KWYPSRHQT2"
 };
 
 // 初始化 Firebase 应用程序
